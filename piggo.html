@@ -248,6 +248,20 @@ body {
 </style>
 </head>
 <body>
+
+<!-- 燒烏龜按鈕 -->
+<div class="turtle-btn" id="turtleBtn" title="祈求好天氣">🔥</div>
+
+<!-- 燒烏龜動畫 -->
+<div class="turtle-overlay" id="turtleOverlay">
+  <div class="turtle-stage">
+    🐢
+    <div class="turtle-fire" id="turtleFire">🔥</div>
+  </div>
+  <div class="turtle-msg" id="turtleMsg"></div>
+  <div class="turtle-close" id="turtleClose">點任何地方關閉</div>
+</div>
+
 <div class="page">
 
 <!-- Header -->
@@ -589,6 +603,51 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+</script>
+
+
+<script>
+(function() {
+  const btn = document.getElementById('turtleBtn');
+  const overlay = document.getElementById('turtleOverlay');
+  const fire = document.getElementById('turtleFire');
+  const msg = document.getElementById('turtleMsg');
+
+  const prayers = [
+    '🌤️ 天氣晴朗・海象平靜\n祈求小琉球好天氣！',
+    '🐢 海龜保佑\n浮潛看到超多龜！',
+    '🌊 風平浪靜\nSUP 一板都不翻！',
+    '☀️ 豔陽高照\n曬出健康好氣色！',
+    '🙏 出入平安\n旅途順順利利！',
+  ];
+
+  let burned = false;
+
+  btn.addEventListener('click', function() {
+    overlay.classList.add('show');
+    burned = false;
+    fire.classList.remove('show');
+    msg.classList.remove('show');
+    msg.innerHTML = '';
+
+    // 點火
+    setTimeout(function() {
+      fire.classList.add('show');
+    }, 400);
+
+    // 顯示祈願文字
+    setTimeout(function() {
+      const prayer = prayers[Math.floor(Math.random() * prayers.length)];
+      msg.innerHTML = prayer.replace('\n', '<br>');
+      msg.classList.add('show');
+      burned = true;
+    }, 1200);
+  });
+
+  overlay.addEventListener('click', function() {
+    overlay.classList.remove('show');
+  });
+})();
 </script>
 
 </body>
