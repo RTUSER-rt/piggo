@@ -1,0 +1,641 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小琉球 3天2夜 6/17–19</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ocean: #0a7ea4;
+    --teal: #2dbfb8;
+    --sand: #f5efe6;
+    --coral: #e8735a;
+    --deep: #0d3b52;
+    --foam: #e0f7f6;
+    --gold: #d4a843;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--sand);
+    color: var(--deep);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Header */
+  .hero {
+    background: linear-gradient(135deg, var(--deep) 0%, var(--ocean) 50%, var(--teal) 100%);
+    color: white;
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 0;
+    height: 60px;
+    background: var(--sand);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+  .wave-bg {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 0.07;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 28px,
+      rgba(255,255,255,0.5) 28px,
+      rgba(255,255,255,0.5) 30px
+    );
+  }
+  .hero-emoji { font-size: 52px; display: block; margin-bottom: 12px; animation: float 3s ease-in-out infinite; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .hero h1 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(28px, 7vw, 48px);
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .hero-date {
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    opacity: 0.85;
+    font-weight: 300;
+    margin-bottom: 20px;
+  }
+  .hero-tags { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .tag {
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Transport info */
+  .transport-bar {
+    background: var(--deep);
+    color: white;
+    margin: 0 16px;
+    border-radius: 16px;
+    padding: 20px 24px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-top: -8px;
+    box-shadow: 0 8px 24px rgba(13,59,82,0.25);
+    position: relative;
+    z-index: 1;
+  }
+  .transport-icon { font-size: 28px; flex-shrink: 0; }
+  .transport-title { font-size: 11px; letter-spacing: 0.15em; opacity: 0.6; margin-bottom: 4px; text-transform: uppercase; }
+  .transport-detail { font-size: 14px; line-height: 1.6; }
+  .transport-detail strong { color: var(--teal); }
+
+  /* Days */
+  .days-container { padding: 24px 16px 40px; display: flex; flex-direction: column; gap: 20px; }
+
+  .day-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(13,59,82,0.08);
+  }
+  .day-header {
+    padding: 18px 24px 14px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid rgba(13,59,82,0.08);
+  }
+  .day-num {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--ocean);
+    opacity: 0.25;
+  }
+  .day-info h2 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .day-info p { font-size: 12px; color: #888; margin-top: 2px; }
+  .day-badge {
+    margin-left: auto;
+    background: var(--foam);
+    color: var(--ocean);
+    border-radius: 10px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .day-badge.water { background: #e8f4fd; color: #1a6fa8; }
+  .day-badge.depart { background: #fef3e8; color: #c0642a; }
+
+  .timeline { padding: 16px 24px 20px; }
+  .tl-item {
+    display: flex;
+    gap: 16px;
+    position: relative;
+    padding-bottom: 18px;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 36px;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--teal), transparent);
+    opacity: 0.3;
+  }
+  .tl-dot {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    background: var(--foam);
+  }
+  .tl-content { flex: 1; padding-top: 6px; }
+  .tl-time { font-size: 11px; color: var(--teal); font-weight: 500; letter-spacing: 0.05em; margin-bottom: 2px; }
+  .tl-title { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+  .tl-note { font-size: 12px; color: #777; line-height: 1.6; }
+  .tl-note a { color: var(--ocean); text-decoration: none; }
+  .tl-note strong { color: var(--coral); }
+
+  /* Tips */
+  .tips-card {
+    background: linear-gradient(135deg, var(--deep), var(--ocean));
+    margin: 0 16px;
+    border-radius: 20px;
+    padding: 20px 24px;
+    color: white;
+    box-shadow: 0 8px 24px rgba(13,59,82,0.2);
+  }
+  .tips-title {
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    opacity: 0.7;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .tip-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    line-height: 1.6;
+    align-items: flex-start;
+  }
+  .tip-item:last-child { margin-bottom: 0; }
+  .tip-icon { flex-shrink: 0; font-size: 16px; }
+
+  /* Food section */
+  .food-section {
+    margin: 20px 16px 0;
+  }
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--ocean);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  .food-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .food-card {
+    background: white;
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 2px 12px rgba(13,59,82,0.07);
+  }
+  .food-icon { font-size: 22px; margin-bottom: 6px; }
+  .food-name { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .food-tip { font-size: 11px; color: #888; line-height: 1.5; }
+
+  footer {
+    text-align: center;
+    padding: 24px 16px 40px;
+    font-size: 12px;
+    color: #aaa;
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wave-bg"></div>
+  <span class="hero-emoji">🐢</span>
+  <h1>小琉球 3天2夜</h1>
+  <div class="hero-date">JUN 17 – 19, 2026 ｜ 三 四 五</div>
+  <div class="hero-tags">
+    <span class="tag">🛵 機車環島</span>
+    <span class="tag">🌊 浮潛玩水</span>
+    <span class="tag">🦀 潮間帶導覽</span>
+    <span class="tag">🌅 夕陽秘境</span>
+  </div>
+</div>
+
+<!-- Transport -->
+<div class="transport-bar">
+  <div class="transport-icon">🚄</div>
+  <div>
+    <div class="transport-title">交通方式（擇一）</div>
+    <div class="transport-detail">
+      台中高鐵 → 左營 → 東港碼頭<br><br>
+      🚌 <strong>台灣好行 9127D（推薦）</strong><br>
+      高鐵左營站 → 東琉線碼頭，來回僅 <strong>$230</strong><br>
+      班次多・準時・可先買票保留位置・或直接刷<strong>悠遊卡</strong>上車<br>
+      大鵬灣琉球線櫃檯領取「劃位卡」・高鐵搭乘另享 <strong>85折</strong><br>
+      機車也可同步一起租，雙人平均一天才 $276<br><br>
+      🚐 <strong>包九人座（湊人或包車）</strong><br>
+      2人共乘可現場湊車，或自包約45分抵東港 ・ 📞 <strong>0982-198-138</strong>
+    </div>
+  </div>
+</div>
+
+<div class="days-container">
+
+  <!-- Day 1 -->
+  <div class="day-card">
+    <div class="day-header">
+      <div class="day-num">01</div>
+      <div class="day-info">
+        <h2>抵達・安頓・夜間導覽</h2>
+        <p>6月17日（三）</p>
+      </div>
+      <div class="day-badge">第一天</div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">🚄</div>
+        <div class="tl-content">
+          <div class="tl-time">10:20 出發</div>
+          <div class="tl-title">台中搭高鐵至左營（車次117）</div>
+          <div class="tl-note">10:20 台中發車 → 11:05 左營抵達，共2人（來回共4張票）</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🚌</div>
+        <div class="tl-content">
+          <div class="tl-time">上午</div>
+          <div class="tl-title">台灣好行 9127D → 東港碼頭</div>
+          <div class="tl-note">高鐵左營站搭台灣好行，大鵬灣琉球線櫃檯領<strong>劃位卡</strong>，可刷悠遊卡或現場買票。來回 <strong>$230</strong>，高鐵搭乘享 85 折。到達後至「東琉線」售票口換取船票（<strong>帶身分證/健保卡</strong>）</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">⛴️</div>
+        <div class="tl-content">
+          <div class="tl-time">建議搭 9–10 點班次</div>
+          <div class="tl-title">搭船前往小琉球</div>
+          <div class="tl-note">至「觀月海音會館」窗口報到，告知訂票姓名與<strong>2人</strong>取票後登船</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🏡</div>
+        <div class="tl-content">
+          <div class="tl-time">抵達後</div>
+          <div class="tl-title">民宿寄放行李・領機車</div>
+          <div class="tl-note">下碼頭步行約 2 分鐘到民宿，check-in 15:00，可先寄放行李。機車阿姨在旁邊 20 秒路程 🛵</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🌺</div>
+        <div class="tl-content">
+          <div class="tl-time">下午 抵達後</div>
+          <div class="tl-title">花瓶岩 📸 打卡地標</div>
+          <div class="tl-note">距碼頭僅300公尺走路可達，小琉球最具代表性地標。停車場岸邊往下看有機會直接看到海龜！免費・24小時</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🌅</div>
+        <div class="tl-content">
+          <div class="tl-time">傍晚</div>
+          <div class="tl-title">落日亭・夕陽＋觀星</div>
+          <div class="tl-note">位於小琉球最西南角，觀景平台視野遼闊。沒有路燈光害，晚上有解說員帶<strong>觀星導覽</strong>！入場記得關車燈。免費・24小時</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🍛</div>
+        <div class="tl-content">
+          <div class="tl-time">晚餐</div>
+          <div class="tl-title">穀泰泰式餐廳（Mimigo強推No.1）</div>
+          <div class="tl-note">招牌<strong>地獄火山排骨</strong>是IG熱門打卡！泰北咖哩麵、涼拌青木瓜超道地，每天人潮滿滿，<strong>強烈建議先訂位</strong></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🔦</div>
+        <div class="tl-content">
+          <div class="tl-time">晚上</div>
+          <div class="tl-title">夜間生態導覽（含套裝）</div>
+          <div class="tl-note">套裝行程包含潮間帶或夜間導覽，建議今晚安排</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 2 -->
+  <div class="day-card">
+    <div class="day-header">
+      <div class="day-num">02</div>
+      <div class="day-info">
+        <h2>玩水・浮潛・環島美食</h2>
+        <p>6月18日（四）⭐ 主力玩水日</p>
+      </div>
+      <div class="day-badge water">🌊 玩水日</div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">🍳</div>
+        <div class="tl-content">
+          <div class="tl-time">早餐 06:00起</div>
+          <div class="tl-title">洪媽媽早餐店（30年老店）</div>
+          <div class="tl-note">必點<strong>琉球粿、黑糖賓士包、香蔥油條</strong>。人潮多，建議6點多就去，只賣到11點</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🚣</div>
+        <div class="tl-content">
+          <div class="tl-time">08:00 或 10:00</div>
+          <div class="tl-title">🌟 F.G 滿福 — 獨木舟（1.5小時）</div>
+          <div class="tl-note">三合一套裝第一項。可升級<strong>透明獨木舟 +$200/人</strong>，海底清晰可見超夢幻！2人1艘，單人報名則獨享一艘</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🏄</div>
+        <div class="tl-content">
+          <div class="tl-time">10:00 或 13:00</div>
+          <div class="tl-title">🌟 F.G 滿福 — SUP立槳（1.5小時）</div>
+          <div class="tl-note">未滿12歲需與大人兩人一板。也可安排 <strong>17:00 夕陽團</strong>，在夕陽下划SUP超浪漫！梯次可自由安排</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🤿</div>
+        <div class="tl-content">
+          <div class="tl-time">13:00–16:00 擇一</div>
+          <div class="tl-title">🌟 F.G 滿福 — 浮潛看海龜（1.5小時）</div>
+          <div class="tl-note">套裝含保險、拍照、<strong>免費空拍</strong>、浮潛裝備全包！上午海況較穩建議優先。<strong>防曬、防水袋必備</strong></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">💰</div>
+        <div class="tl-content">
+          <div class="tl-time">費用參考</div>
+          <div class="tl-title">三合一套裝 $1,399/人（原價$2,200）・2人合計 $2,798</div>
+          <div class="tl-note">三項可分兩天完成，梯次自由安排。不限定當天全做完，可把浮潛留到第三天早上！</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🍱</div>
+        <div class="tl-content">
+          <div class="tl-time">午餐</div>
+          <div class="tl-title">蜂巢蝦海景餐廳 🦐</div>
+          <div class="tl-note">可電話預約，一桌約 $1,300。<strong>一定要點蜂巢蝦！</strong>隔壁烤鴨也可一起點，份量大、超新鮮</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🌊</div>
+        <div class="tl-content">
+          <div class="tl-time">下午</div>
+          <div class="tl-title">環島・4大景點路線</div>
+          <div class="tl-note"><strong>望海亭</strong>（居高臨下看海龜）→ <strong>蛤板灣</strong> → <strong>烏鬼洞</strong>（順路吃雪花冰！）→ <strong>白燈塔 / 龍蝦洞</strong>。全程騎車約30分鐘</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🧊</div>
+        <div class="tl-content">
+          <div class="tl-time">途中</div>
+          <div class="tl-title">烏鬼洞雪花冰・消暑</div>
+          <div class="tl-note">招牌<strong>古法桑椹雪花冰</strong>酸甜解暑，現烤魷魚頭絕配，還有伴手禮可採購</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🐢</div>
+        <div class="tl-content">
+          <div class="tl-time">傍晚</div>
+          <div class="tl-title">海龜燒（861dayday）</div>
+          <div class="tl-note">海龜造型雞蛋糕，原味/蜂蜜/玉米起司。門口「我在小琉球 你呢？」超好拍</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🔥</div>
+        <div class="tl-content">
+          <div class="tl-time">晚餐</div>
+          <div class="tl-title">金獅子號海景燒烤Bar</div>
+          <div class="tl-note">面向大海看夕陽吃燒烤，有店員代烤不用自己流汗。或選市區熱炒店</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 3 -->
+  <div class="day-card">
+    <div class="day-header">
+      <div class="day-num">03</div>
+      <div class="day-info">
+        <h2>早餐・退房・返回台中</h2>
+        <p>6月19日（五）</p>
+      </div>
+      <div class="day-badge depart">🚢 返程日</div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">🍳</div>
+        <div class="tl-content">
+          <div class="tl-time">早餐 07:00–11:00</div>
+          <div class="tl-title">相思麵 或 民宿早餐（第二天餐券）</div>
+          <div class="tl-note"><strong>相思麵</strong>：柴燒古早味肉燥麵，用漂流木大火熬煮肉燥，Q彈麵條配叉燒，只開到14:00，想吃要早。或直接用民宿早餐券省事</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🧳</div>
+        <div class="tl-content">
+          <div class="tl-time">退房前（11:00 前）</div>
+          <div class="tl-title">還車・退房</div>
+          <div class="tl-note">機車歸還，辦理退房，帶好<strong>來回船票（回程票）</strong></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🛍️</div>
+        <div class="tl-content">
+          <div class="tl-time">退房後</div>
+          <div class="tl-title">採買伴手禮・王老師手工麻花捲</div>
+          <div class="tl-note">小琉球招牌土產！<strong>王老師手工麻花捲</strong>（三民路84號）是島上創始點，酥脆口味多樣，每包60元可買10送1。推薦原味、黑糖、梅子口味</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">⛴️</div>
+        <div class="tl-content">
+          <div class="tl-time">依船班時刻</div>
+          <div class="tl-title">搭船返回東港</div>
+          <div class="tl-note">回程票已含在套裝內，妥善保管勿遺失</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🚄</div>
+        <div class="tl-content">
+          <div class="tl-time">15:55 發車</div>
+          <div class="tl-title">左營搭高鐵返台中（車次140）</div>
+          <div class="tl-note">15:55 左營發車 → 16:37 台中抵達，記得抓好從東港碼頭回左營的時間</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Tips -->
+<div class="tips-card">
+  <div class="tips-title">📋 重要提醒</div>
+  <div class="tip-item"><div class="tip-icon">🪪</div><div>大人帶<strong>身分證</strong>，小孩帶<strong>健保卡</strong>，搭船保險必備</div></div>
+  <div class="tip-item"><div class="tip-icon">🎫</div><div>領的是<strong>來回票</strong>，請妥善保管，回程直接使用</div></div>
+  <div class="tip-item"><div class="tip-icon">🛵</div><div>機車套裝 2人1台，剛好一台，注意戴安全帽</div></div>
+  <div class="tip-item"><div class="tip-icon">☀️</div><div>6月旺季烈陽，<strong>防曬、帽子、防水袋</strong>必帶</div></div>
+  <div class="tip-item"><div class="tip-icon">🏨</div><div>check-in 15:00，可提前到民宿寄放行李先去玩</div></div>
+  <div class="tip-item"><div class="tip-icon">📞</div><div>包車老闆：<strong>0982-198-138</strong>（來回都可聯絡）</div></div>
+  <div class="tip-item"><div class="tip-icon">🚣</div><div>F.G 套裝三項可<strong>分兩天完成</strong>，梯次自由安排，建議提早預約梯次</div></div>
+  <div class="tip-item"><div class="tip-icon">📸</div><div>套裝含<strong>免費空拍</strong>，記得確認空拍時段，穿色彩鮮艷衣服拍起來更好看</div></div>
+  <div class="tip-item"><div class="tip-icon">🌅</div><div>17:00 夕陽團 SUP/獨木舟超夢幻，人數有限<strong>記得提早搶</strong></div></div>
+</div>
+
+<!-- Food -->
+<div class="food-section">
+  <div class="section-label">美食地圖（來源：Mimigo旅遊指南）</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <div class="food-icon">🥞</div>
+      <div class="food-name">洪媽媽早餐店</div>
+      <div class="food-tip">30年老店・必吃琉球粿、黑糖賓士包・05:30開賣</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🍜</div>
+      <div class="food-name">相思麵</div>
+      <div class="food-tip">柴燒古早肉燥麵・07:00–14:00・早去才吃得到</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🍛</div>
+      <div class="food-name">穀泰泰式餐廳</div>
+      <div class="food-tip">地獄火山排骨IG爆紅・泰北咖哩麵必吃・需訂位</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🦐</div>
+      <div class="food-name">蜂巢蝦海景餐廳</div>
+      <div class="food-tip">午餐首選・可電話預約・一桌$1300・隔壁烤鴨同點</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🔥</div>
+      <div class="food-name">金獅子號海景燒烤</div>
+      <div class="food-tip">無敵海景・代烤服務・傍晚看夕陽吃燒烤超享受</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🧀</div>
+      <div class="food-name">YOYO起司捲</div>
+      <div class="food-tip">自家漁船現撈鮪魚・莫扎瑞拉起司爆漿・11點開賣要訂</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🐢</div>
+      <div class="food-name">海龜燒（861dayday）</div>
+      <div class="food-tip">市區必吃・原味/蜂蜜/玉米起司・超好拍打卡點</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🧊</div>
+      <div class="food-name">烏鬼洞雪花冰</div>
+      <div class="food-tip">烏鬼洞入口旁・古法桑椹雪花冰・現烤魷魚頭絕配</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🍦</div>
+      <div class="food-name">琉冰手作冰棒</div>
+      <div class="food-tip">天然水果製・小朋友適合・玩水後清涼一下</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🍡</div>
+      <div class="food-name">廟口點心站甜甜圈</div>
+      <div class="food-tip">三民老街閩式建築・現烤甜甜圈7種口味・銅板價</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🍡</div>
+      <div class="food-name">小本愛玉</div>
+      <div class="food-tip">去烏鬼洞時順路吃・消暑聖品</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🥨</div>
+      <div class="food-name">王老師手工麻花捲</div>
+      <div class="food-tip">小琉球創始店・三民路84號・買10送1・最佳伴手禮</div>
+    </div>
+  </div>
+</div>
+
+<!-- Spots -->
+<div class="food-section" style="margin-top:16px;">
+  <div class="section-label">🗺️ 環島景點路線（順時針建議）</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <div class="food-icon">🪨</div>
+      <div class="food-name">花瓶岩</div>
+      <div class="food-tip">碼頭300公尺・地標必拍・沙灘踏水・可見海龜</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🏔️</div>
+      <div class="food-name">望海亭</div>
+      <div class="food-tip">居高臨下最美海景・可見海龜覓食・免費24h</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🏖️</div>
+      <div class="food-name">蛤板灣（威尼斯沙灘）</div>
+      <div class="food-tip">熱門沙灘・適合戲水・IG打卡熱點</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🕳️</div>
+      <div class="food-name">烏鬼洞</div>
+      <div class="food-tip">三大必遊景點・珊瑚礁岩洞・內有木雕珊瑚展</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🌅</div>
+      <div class="food-name">落日亭</div>
+      <div class="food-tip">最西南角・最佳夕陽點・夜間觀星導覽超棒</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🦞</div>
+      <div class="food-name">龍蝦洞</div>
+      <div class="food-tip">無救生員，注意安全・24小時開放</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🦌</div>
+      <div class="food-name">鹿粼梅花鹿園區</div>
+      <div class="food-tip">零距離互動梅花鹿・親子必玩・建議網路購票</div>
+    </div>
+    <div class="food-card">
+      <div class="food-icon">🚢</div>
+      <div class="food-name">玻璃船/半潛艇</div>
+      <div class="food-tip">不需下水就能看海底世界・適合小朋友</div>
+    </div>
+  </div>
+</div>
+
+
+  🐢 小琉球 6/17–19 ・ 觀月海音會館 ・ 3天2夜套裝<br>
+  套裝含：住宿 + 來回船票 + 2天機車 + 2天早餐 + 導覽<br>
+  大人 $5,100/人 ・ <strong>2人合計 $10,200</strong>
+</footer>
+
+</body>
+</html>
